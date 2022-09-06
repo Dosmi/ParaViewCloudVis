@@ -4,45 +4,97 @@
 #paraview.compatibility.minor = 10
 
 
+# DEFAULT ARGUMENTS ALL SET HERE:
+# OS-RELATED
+FOLDER = "/"
+
+# SAVING
+SAVE_LOCAL_ILLUMINATION_IMAGE = 1
+SAVE_RAY_TRACED_IMAGE = 0
+SAVE_ANIMATION = 0
+OUTPUT_NAMES = "rendered"
+OUTPUT_PATH = "/work/e710/shared"
+
+# DATA:
+DATA_PATH = "/work/e710/shared/hl3_98.nc"
+TRANSFER_FUNCTION_PATH = "/work/e710/shared/hl_Cloud_white_realistic_tf.json"
+TRANSFER_FUNCTION_TITLE = "WhiteCloud"
+
+# CAMERA SETTINGS:
+CAMERA_OFFSET = [1.275, 1.0, 3.0]
+
+# ANIMATION SETTINGS:
+NUM_FRAMES = 200
+ANIMATION_FRAME_START = 0
+ANIMATION_FRAME_END = 20
+FPS = 24
+
+# OUTPUT SETTINGS:
+IMAGE_OUTPUT_WIDTH = 1920
+IMAGE_OUTPUT_HEIGHT = 1024
+
+VIDEO_OUTPUT_WIDTH = 1920
+VIDEO_OUTPUT_HEIGHT = 1024
+
+NUM_ORBITS = 1
+ANIMATION_TIME_START = 0.0
+ANIMATION_TIME_END = 1.0
+
+# RAY-TRACING OPTIONS
+LIGHT_ROTATION = 90.0
+
+
+
 # Set-up named command-line arguments:
 import argparse, sys, os
 
 parser=argparse.ArgumentParser()
 
 parser.add_argument("--sli",        help="Save Local Illumination rendered image",
-                    nargs='?',      default=1, const=0)
+                    nargs='?',      default=SAVE_LOCAL_ILLUMINATION_IMAGE, const=SAVE_LOCAL_ILLUMINATION_IMAGE)
 parser.add_argument("--srtx",       help="Save Ray-Traced/Path-Traced rendered image",
-                    nargs='?',      default=0, const=0)
-parser.add_argument("--name",       help="Set image Name for all outputs (images and animation). Output type (li, rtx, anim) will be appended to this name.",
-                    nargs=1, type=str, default="rendered")
+                    nargs='?',      default=SAVE_RAY_TRACED_IMAGE, const=SAVE_RAY_TRACED_IMAGE)
 parser.add_argument("--sanim",      help="Save Animation",
-                    nargs='?',      default=0, const=0)
+                    nargs='?',      default=SAVE_ANIMATION, const=SAVE_ANIMATION)
+parser.add_argument("--name",       help="Set image Name for all outputs (images and animation). Output type (li, rtx, anim) will be appended to this name.",
+                    nargs=1, type=str, default=OUTPUT_NAMES)
 parser.add_argument("--data",       help="Path to Data",
-                    nargs=1, type=str, default="C:\\Users\\Dom\\AppData\\Roaming\\MobaXterm\\home\\hl3_98.nc")
+                    nargs=1, type=str, default=DATA_PATH )
 parser.add_argument("--tf",       help="Path to Transfer Function file .json, and the transfer function name",
-                    nargs=2, type=str, default=["C:\\Users\\Dom\\Documents\\1-PhD-Year\\2022-06-to-09-Summer\\OngoingVisualisations\\2022-08-31-TransferFunctions\\hl_Cloud_640_realistic_tf.json",
-                                                'Cloudx640_TF_Realistic'])
+                    nargs=2, type=str, default=[TRANSFER_FUNCTION_PATH, TRANSFER_FUNCTION_TITLE])
 parser.add_argument("--camoffset",  help="Camera offset (as fracional percentage) from center, default (1.275, 1, 3)",
-                    nargs=3, type=float, default=[1.275, 1.0, 3.0])
+                    nargs=3, type=float, default=CAMERA_OFFSET)
 
 parser.add_argument("--numframes",  help="Number of frames in animation",
-                    nargs='?',      default=200, const=200)
-parser.add_argument("--animstart",  help="Frame Start Number in animation output",
-                    nargs='?',      default=0, const=0)
-parser.add_argument("--animend",  help="Frame End Number in animation output",
-                    nargs='?',      default=200, const=200)
+                    nargs='?',      default=NUM_FRAMES, const=NUM_FRAMES, type=int)
+parser.add_argument("--anim_frame_start",  help="Frame Start Number in animation output",
+                    nargs='?',      default=ANIMATION_FRAME_START, const=ANIMATION_FRAME_START, type=int)
+parser.add_argument("--anim_frame_end",  help="Frame End Number in animation output",
+                    nargs='?',      default=ANIMATION_FRAME_END, const=ANIMATION_FRAME_END, type=int)
 parser.add_argument("--fps",  help="Frames per second in animation output",
-                    nargs='?',      default=24, const=24)
+                    nargs='?',      default=FPS, const=FPS, type=int)
 
-parser.add_argument("--output_width",  help="Image/Video output width",
-                    nargs='?',      default=1920, const=1920)
-parser.add_argument("--output_height",  help="Image/Video output height",
-                    nargs='?',      default=1024, const=1024)
+parser.add_argument("--image_output_width",  help="Image/Video output width",
+                    nargs='?',      default=IMAGE_OUTPUT_WIDTH, const=IMAGE_OUTPUT_WIDTH, type=int)
+parser.add_argument("--image_output_height",  help="Image/Video output height",
+                    nargs='?',      default=VIDEO_OUTPUT_HEIGHT, const=VIDEO_OUTPUT_HEIGHT, type=int)
 
 parser.add_argument("--video_output_width",  help="Image/Video output width",
-                    nargs='?',      default=1920, const=1920)
+                    nargs='?',      default=VIDEO_OUTPUT_WIDTH, const=VIDEO_OUTPUT_WIDTH, type=int)
 parser.add_argument("--video_output_height",  help="Image/Video output height",
-                    nargs='?',      default=1024, const=1024)
+                    nargs='?',      default=VIDEO_OUTPUT_HEIGHT, const=VIDEO_OUTPUT_HEIGHT, type=int)
+
+parser.add_argument("--num_orbits",  help="Number of orbits (spins) arount the object",
+                    nargs='?',      default=NUM_ORBITS, const=NUM_ORBITS, type=int)
+
+parser.add_argument("--anim_time_start",  help="Animation time start (if higher than 1.0, it will pick next timestep of time-dependent data) ",
+                    nargs='?',      default=ANIMATION_TIME_START, const=ANIMATION_TIME_START, type=float)
+
+parser.add_argument("--anim_time_end",  help="Animation time end (if higher than 1.0, it will pick next timestep of time-dependent data) ",
+                    nargs='?',      default=ANIMATION_TIME_END, const=ANIMATION_TIME_END, type=float)
+
+parser.add_argument("--light_rotation",  help="Degrees to rotate light in an orbit",
+                    nargs='?',      default=LIGHT_ROTATION, const=LIGHT_ROTATION, type=float)
 
 
 args=parser.parse_args()
@@ -53,8 +105,8 @@ print(f"Dict format: {vars(args)}")
 parsed_path = os.path.normpath(args.data).split(os.sep)
 
 file_name       = parsed_path[-1]
-formatted_path  = '\\'.join(parsed_path[:-1])
-print("FILENAME:", filename, "FORMATTED:", formatted_path)
+formatted_path  = OUTPUT_PATH# FOLDER.join(parsed_path[:-1])
+print("FILENAME:", file_name, "FORMATTED:", formatted_path)
 
 print(args.tf[0], args.tf[1])
 
@@ -66,9 +118,9 @@ import math
 
 def getAbsoluteRotation(x, y):
     if x >= 0:
-        return math.acos(y) * 180 / math.pi
+        return math.acos(y) * 180.0 / math.pi
     else:
-        return math.asin(y) * 180 / math.pi + 270
+        return math.asin(y) * 180.0 / math.pi + 270.0
 
 def y_light(d_dst, l_deg, y_cam, z_cam, f_p):
     return d_dst * math.sin(
@@ -161,19 +213,27 @@ renderView1.Update()
 light1 = AddLight(view=renderView1)
 
 # toggle 3D widget visibility (only when running from the GUI)
-Show3DWidgets(proxy=light1)
+# Show3DWidgets(proxy=light1)
+# Hide3DWidgets(proxy=light1)
+# HideInteractiveWidgets(proxy=light1)
 
 
 # camera-centre distance:
 camera_centre_distance = math.dist((cam.GetPosition()[1], cam.GetPosition()[2]),
                                    (cam.GetFocalPoint()[1], cam.GetFocalPoint()[2]))
 
-light_y_pos = y_light(camera_centre_distance, 90.0, campos[1], campos[2], camfocus)
-light_z_pos = z_light(camera_centre_distance, 90.0, campos[1], campos[2], camfocus)
+light_y_pos = y_light(camera_centre_distance, args.light_rotation, campos[1], campos[2], camfocus)
+light_z_pos = z_light(camera_centre_distance, args.light_rotation, campos[1], campos[2], camfocus)
 
 #update the light
 light1.Position = [campos[0], light_y_pos, light_z_pos]
-light1.FocalPoint = list(camfocus) #[4.0, 3.115468740463257, 3.115468740463257]
+# light1.FocalPoint = list(camfocus) #[4.0, 3.115468740463257, 3.115468740463257]
+light1.FocalPoint = [campos[0],
+                     light_y_pos+(camfocus[0]-light_y_pos)/camera_centre_distance,
+                     light_z_pos+(camfocus[1]-light_z_pos)/camera_centre_distance]
+
+
+
 
 # Properties modified on light1
 light1.Radius = 2.0
@@ -227,10 +287,10 @@ renderView1.EnableRayTracing = 0
 animationScene1 = GetAnimationScene()
 
 # Properties modified on animationScene1
-animationScene1.StartTime = 0.0
+animationScene1.StartTime = args.anim_time_start #0.0
 
 # Properties modified on animationScene1
-animationScene1.EndTime = 1.0
+animationScene1.EndTime = args.anim_time_end
 
 # get the time-keeper
 timeKeeper1 = GetTimeKeeper()
@@ -240,7 +300,7 @@ animationScene1.NumberOfFrames = args.numframes #180
 
 
 # Programmatically compute the orbit camera points that ParaView will interpolate between
-# NOTE: by default, 7 is enough for an orbit
+# NOTE: by default, 7 is enough for an orbit (as ParaView pvpython generates 7 points itself)
 OrbitPoints = []
 
 for i in range(0,7):
@@ -254,34 +314,42 @@ cameraAnimationCue1 = GetCameraTrack(view=renderView1)
 
 # create keyframes for this animation track
 
-# create a key frame
-keyFrame1 = CameraKeyFrame()
-keyFrame1.Position = campos #[4.0, 3.115468740463257, 9.776123778010504]
-keyFrame1.FocalPoint = camfocus #[4.0, 3.115468740463257, 3.115468740463257]
-keyFrame1.ViewUp = camviewup #[1.0, 0.0, 0.0]
-keyFrame1.ParallelScale = cam.GetParallelScale() # 5.41035041419737
-keyFrame1.PositionPathPoints = OrbitPoints
-#[4.0, 3.11547, 9.77612,
-# 4.0, -2.0920358637006826, 7.268317348750374,
-# 4.0, -3.378183598273864, 1.633335941243875,
-# 4.0, 0.22552227304663575, -2.8855682899942483,
-# 4.0, 6.005417726953363, -2.885568289994249,
-# 4.0, 9.609123598273865, 1.6333359412438728,
-# 4.0, 8.322975863700686, 7.268317348750373]
-keyFrame1.FocalPathPoints = camfocus #[4.0, 3.11547, 3.11547]
-keyFrame1.ClosedPositionPath = 1
+keyframes_list = []
 
-# create a key frame
-keyFrame2 = CameraKeyFrame()
-keyFrame2.KeyTime = 1.0
-keyFrame2.Position = campos #[4.0, 3.115468740463257, 9.776123778010504]
-keyFrame2.FocalPoint = camfocus #[4.0, 3.115468740463257, 3.115468740463257]
-keyFrame2.ViewUp = camviewup #[1.0, 0.0, 0.0]
-keyFrame2.ParallelScale = cam.GetParallelScale() # 5.41035041419737
+for i in range(0, args.num_orbits):
+    # create a key frame
+    keyFrame1 = CameraKeyFrame()
+    # keyFrame1.KeyTime = args.anim_time_start + args.anim_time_end/args.num_orbits * i
+    # NOTE: time for orbits actually goes from 0.0 to 1.0, even though actual time steps might got from 0.0 to 7.0 etc.
+    keyFrame1.KeyTime = args.anim_time_start + 1.0/args.num_orbits * i
+    keyFrame1.Position = campos #[4.0, 3.115468740463257, 9.776123778010504]
+    keyFrame1.FocalPoint = camfocus #[4.0, 3.115468740463257, 3.115468740463257]
+    keyFrame1.ViewUp = camviewup #[1.0, 0.0, 0.0]
+    keyFrame1.ParallelScale = cam.GetParallelScale() # 5.41035041419737
+    keyFrame1.PositionPathPoints = OrbitPoints
+    keyFrame1.FocalPathPoints = camfocus #[4.0, 3.11547, 3.11547]
+    keyFrame1.ClosedPositionPath = 1
+
+    keyframes_list.append(keyFrame1)
+
+    # create a key frame
+    keyFrame2 = CameraKeyFrame()
+    # keyFrame2.KeyTime = args.anim_time_start + args.anim_time_end/args.num_orbits * (i+1)
+    keyFrame2.KeyTime = args.anim_time_start + 1.0/args.num_orbits * (i+1)
+    keyFrame2.Position = campos #[4.0, 3.115468740463257, 9.776123778010504]
+    keyFrame2.FocalPoint = camfocus #[4.0, 3.115468740463257, 3.115468740463257]
+    keyFrame2.ViewUp = camviewup #[1.0, 0.0, 0.0]
+    keyFrame2.ParallelScale = cam.GetParallelScale() # 5.41035041419737
+
+    keyframes_list.append(keyFrame2)
+
+    print("orbit:", i, "start: ", keyFrame1.KeyTime, " end ", keyFrame2.KeyTime)
+
+
 
 # initialize the animation track
 cameraAnimationCue1.Mode = 'Path-based'
-cameraAnimationCue1.KeyFrames = [keyFrame1, keyFrame2]
+cameraAnimationCue1.KeyFrames = keyframes_list #[keyFrame1, keyFrame2, keyFrame3, keyFrame4]
 
 # set scalar coloring
 ColorBy(hl3_98ncDisplay, ('POINTS', 'hl'))
@@ -328,21 +396,23 @@ hl3_98ncDisplay.SetRepresentationType('Volume')
 layout1 = GetLayout()
 
 # layout/tab size in pixels
-layout1.SetSize(args.output_width, args.output_height)
+layout1.SetSize(args.image_output_width, args.image_output_height)
 
 # current camera placement for renderView1
 renderView1.CameraPosition   = list(cam.GetPosition())#[4.0, 3.115468740463257, 9.776123778010504]
 renderView1.CameraFocalPoint = list(cam.GetFocalPoint()) #[4.0, 3.115468740463257, 3.115468740463257]
 renderView1.CameraViewUp = camviewup
-renderView1.CameraParallelScale = 5.41035041419737
+renderView1.CameraParallelScale = cam.GetParallelScale() #5.41035041419737
 
+#######################################################################################################################
+####################################################### OPTIONS #######################################################
 
-# Option 1: Saving default VTK Volume Local-Illumination image
+# ############################ Option 1: Saving default VTK Volume Local-Illumination image ##########################
 
 if args.sli:
     # save screenshot
-    # SaveScreenshot('C:/Users/Dom/Documents/1-PhD-Year/2022-06-to-09-Summer/OngoingVisualisations/2022-09-01-Automation/0904auto-test.png', renderView1, ImageResolution=[args.output_width, args.output_height])
-    SaveScreenshot(formatted_path+"\\"+args.name+"_sli.png", renderView1, ImageResolution=[args.output_width, args.output_height])
+    # SaveScreenshot('C:/Users/Dom/Documents/1-PhD-Year/2022-06-to-09-Summer/OngoingVisualisations/2022-09-01-Automation/0904auto-test.png', renderView1, ImageResolution=[args.image_output_width, args.image_output_height])
+    SaveScreenshot(formatted_path+FOLDER+args.name+"_sli.png", renderView1, ImageResolution=[args.image_output_width, args.image_output_height])
 
 else:
     print("didn't save screenshot")
@@ -353,7 +423,7 @@ else:
 
 
 
-# Option 2: Saving Ray-traced Volume image
+######################################## Option 2: Saving Ray-traced Volume image ####################################
 if args.srtx:
     # hide color bar/color legend
     hl3_98ncDisplay.SetScalarBarVisibility(renderView1, False)
@@ -365,7 +435,7 @@ if args.srtx:
     renderView1.EnableRayTracing = 1
 
     # layout/tab size in pixels
-    layout1.SetSize(args.output_width, args.output_height)
+    layout1.SetSize(args.image_output_width, args.image_output_height)
 
     # current camera placement for renderView1
     renderView1.CameraPosition = campos #[4.0, 3.115468740463257, 9.776123778010504]
@@ -374,8 +444,8 @@ if args.srtx:
     renderView1.CameraParallelScale = cam.GetParallelScale() #5.41035041419737
 
     # save screenshot
-    # SaveScreenshot('C:/Users/Dom/Documents/1-PhD-Year/2022-06-to-09-Summer/OngoingVisualisations/2022-09-01-Automation/auto-rtx-test.png', renderView1, ImageResolution=[args.output_width, args.output_height])
-    SaveScreenshot(formatted_path+"\\"+args.name+"_srtx.png", renderView1, ImageResolution=[args.output_width, args.output_height])
+    # SaveScreenshot('C:/Users/Dom/Documents/1-PhD-Year/2022-06-to-09-Summer/OngoingVisualisations/2022-09-01-Automation/auto-rtx-test.png', renderView1, ImageResolution=[args.image_output_width, args.image_output_height])
+    SaveScreenshot(formatted_path+FOLDER+args.name+"_srtx.png", renderView1, ImageResolution=[args.image_output_width, args.image_output_height])
 
     # Properties modified on renderView1
     renderView1.EnableRayTracing = 0
@@ -386,61 +456,81 @@ else:
 
 
 
-# Option 3: Saving animation
+############################################### Option 3: Saving animation ############################################
+# get light
+lightproxy = GetLight(0, renderView1)
+Hide3DWidgets(proxy=lightproxy)
+
+# Show()
+# lightproxy.Enable = 0
+
+# update the view to ensure updated data information
+# renderView1.Update()
+
+# remove light added to the view
+# RemoveLight(light=lightproxy)
+# Show()
+# light1.Enable = 1
+
 
 if args.sanim:
+    print("saving animation ...")
     # toggle 3D widget visibility (only when running from the GUI)
-    Hide3DWidgets(proxy=light1)
+    # Hide3DWidgets(proxy=light1)
 
     # toggle 3D widget visibility (only when running from the GUI)
-    Show3DWidgets(proxy=light1)
+    # Show3DWidgets(proxy=light1)
 
     # toggle 3D widget visibility (only when running from the GUI)
-    Hide3DWidgets(proxy=light1)
+    # Hide3DWidgets(proxy=light1)
+
+    print("1made it here")
 
     # layout/tab size in pixels
-    layout1.SetSize(args.output_width, args.output_height)
-
+    layout1.SetSize(args.video_output_width, args.video_output_height)
+    print("2made it here")
     # current camera placement for renderView1
     renderView1.CameraPosition = campos #[4.0, 3.115468740463257, 9.776123778010504]
     renderView1.CameraFocalPoint = camfocus #[4.0, 3.115468740463257, 3.115468740463257]
     renderView1.CameraViewUp = camviewup#[1.0, 0.0, 0.0]
     renderView1.CameraParallelScale = cam.GetParallelScale() #5.41035041419737
-
+    print("3made it here")
     # save animation
     # SaveAnimation('C:/Users/Dom/Documents/1-PhD-Year/2022-06-to-09-Summer/OngoingVisualisations/2022-09-01-Automation/auto-animation-test.avi', renderView1, ImageResolution=[1280, 720],
-    SaveAnimation(formatted_path+"\\"+args.name+"_sanim.avi", renderView1, ImageResolution=[args.video_output_width, args.video_output_height],
+    #               FrameRate=24.0,
+    #               FrameWindow=[0, 179])
+    SaveAnimation(formatted_path+FOLDER+args.name+"_sanim.avi", renderView1, ImageResolution=[args.video_output_width, args.video_output_height],
         FrameRate=args.fps, #24,
-        FrameWindow=[args.animstart, args.animend]) #[0, 179])
-
+        FrameWindow=[args.anim_frame_start, args.anim_frame_end-1]) #[0, 179])
+    print("4made it here")
     animationScene1.GoToNext()
 
     animationScene1.GoToPrevious()
 
 else:
     print("didn't save animation")
-#
-# #================================================================
-# # addendum: following script captures some of the application
-# # state to faithfully reproduce the visualization during playback
-# #================================================================
-#
-# #--------------------------------
-# # saving layout sizes for layouts
-#
-# # layout/tab size in pixels
-# layout1.SetSize(args.output_width, 517)
-#
-# #-----------------------------------
-# # saving camera placements for views
-#
-# # current camera placement for renderView1
-# renderView1.CameraPosition = [4.0, 3.11547, 9.77612]
-# renderView1.CameraFocalPoint = [4.0, 3.11547, 3.11547]
-# renderView1.CameraViewUp = [1.0, 0.0, 0.0]
-# renderView1.CameraParallelScale = 5.41035041419737
-#
-# #--------------------------------------------
-# # uncomment the following to render all views
-# # RenderAllViews()
-# # alternatively, if you want to write images, you can use SaveScreenshot(...).
+
+#================================================================
+# addendum: following script captures some of the application
+# state to faithfully reproduce the visualization during playback
+#================================================================
+
+#--------------------------------
+# saving layout sizes for layouts
+
+# layout/tab size in pixels
+layout1.SetSize(args.image_output_width, args.image_output_height)
+
+#-----------------------------------
+# saving camera placements for views
+
+# current camera placement for renderView1
+renderView1.CameraPosition = campos #[4.0, 3.11547, 9.77612]
+renderView1.CameraFocalPoint = camfocus #[4.0, 3.11547, 3.11547]
+renderView1.CameraViewUp = camviewup #[1.0, 0.0, 0.0]
+renderView1.CameraParallelScale = cam.GetParallelScale() #5.41035041419737
+
+#--------------------------------------------
+# uncomment the following to render all views
+# RenderAllViews()
+# alternatively, if you want to write images, you can use SaveScreenshot(...).
