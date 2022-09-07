@@ -45,6 +45,9 @@ ANIMATION_TIME_END = 1.0
 # RAY-TRACING OPTIONS
 LIGHT_ROTATION = 90.0
 
+# WHAT VARIABLE TO VIEW
+MAIN_VARIABLE = 'hgliq'
+
 
 
 # Set-up named command-line arguments:
@@ -97,6 +100,9 @@ parser.add_argument("--anim_time_end",  help="Animation time end (if higher than
 
 parser.add_argument("--light_rotation",  help="Degrees to rotate light in an orbit",
                     nargs='?',      default=LIGHT_ROTATION, const=LIGHT_ROTATION, type=float)
+
+parser.add_argument("--main_variable",  help="Main variable of dataset to visualise",
+                    nargs='?',      default=MAIN_VARIABLE, const=MAIN_VARIABLE, type=str)
 
 
 args=parser.parse_args()
@@ -354,7 +360,7 @@ cameraAnimationCue1.Mode = 'Path-based'
 cameraAnimationCue1.KeyFrames = keyframes_list #[keyFrame1, keyFrame2, keyFrame3, keyFrame4]
 
 # set scalar coloring
-ColorBy(hl3_98ncDisplay, ('POINTS', 'hl'))
+ColorBy(hl3_98ncDisplay, ('POINTS', args.main_variable))
 
 # rescale color and/or opacity maps used to include current data range
 hl3_98ncDisplay.RescaleTransferFunctionToDataRange(True, False)
@@ -362,15 +368,15 @@ hl3_98ncDisplay.RescaleTransferFunctionToDataRange(True, False)
 # show color bar/color legend
 hl3_98ncDisplay.SetScalarBarVisibility(renderView1, True)
 
-# get color transfer function/color map for 'hl'
-hlLUT = GetColorTransferFunction('hl')
+# get color transfer function/color map for args.main_variable
+hlLUT = GetColorTransferFunction(args.main_variable)
 hlLUT.RGBPoints = [0.0, 0.231373, 0.298039, 0.752941,
                    0.03771344944834709, 0.865003, 0.865003, 0.865003,
                    0.07542689889669418, 0.705882, 0.0156863, 0.14902]
 hlLUT.ScalarRangeInitialized = 1.0
 
-# get opacity transfer function/opacity map for 'hl'
-hlPWF = GetOpacityTransferFunction('hl')
+# get opacity transfer function/opacity map for args.main_variable
+hlPWF = GetOpacityTransferFunction(args.main_variable)
 hlPWF.Points = [0.0, 0.0,
                 0.5, 0.0,
                 0.07542689889669418, 1.0,
