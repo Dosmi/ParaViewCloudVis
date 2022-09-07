@@ -9,19 +9,21 @@
 FOLDER = "/"
 
 # SAVING
-SAVE_LOCAL_ILLUMINATION_IMAGE = 1
+SAVE_LOCAL_ILLUMINATION_IMAGE = 0
 SAVE_RAY_TRACED_IMAGE = 0
 SAVE_ANIMATION = 0
 OUTPUT_NAMES = "rendered"
-OUTPUT_PATH = "/work/e710/shared"
+OUTPUT_PATH = "/usr/not-backed-up/sc17dd/"
 
 # DATA:
-DATA_PATH = "/work/e710/shared/hl3_98.nc"
-TRANSFER_FUNCTION_PATH = "/work/e710/shared/hl_Cloud_white_realistic_tf.json"
+# DATA_PATH = ["/work/e710/shared/hl3_98.nc"]
+DATA_PATH = ['/usr/not-backed-up/sc17dd/gridded/grids_1092-only_hgliq_xtime.nc', '/usr/not-backed-up/sc17dd/gridded/grids_1958-only_hgliq_xtime.nc', '/usr/not-backed-up/sc17dd/gridded/grids_2780-only_hgliq_xtime.nc', '/usr/not-backed-up/sc17dd/gridded/grids_3665-only_hgliq_xtime.nc', '/usr/not-backed-up/sc17dd/gridded/grids_4483-only_hgliq_xtime.nc', '/usr/not-backed-up/sc17dd/gridded/grids_5220-only_hgliq_xtime.nc', '/usr/not-backed-up/sc17dd/gridded/grids_5937-only_hgliq_xtime.nc']
+# TRANSFER_FUNCTION_PATH = "/work/e710/shared/hl_Cloud_white_realistic_tf.json"
+TRANSFER_FUNCTION_PATH = "/home/csunix/sc17dd/modules5/summer2022/ParaViewCloudVis/transfer_functions/hl_Cloud_white_realistic_tf.json"
 TRANSFER_FUNCTION_TITLE = "WhiteCloud"
 
 # CAMERA SETTINGS:
-CAMERA_OFFSET = [1.275, 1.0, 3.0]
+CAMERA_OFFSET = [1.25, 1.0, 2.7]
 
 # ANIMATION SETTINGS:
 NUM_FRAMES = 200
@@ -102,11 +104,11 @@ args=parser.parse_args()
 print(f"Args: {args}\nCommand Line: {sys.argv}\nsrtx: {args.srtx}")
 print(f"Dict format: {vars(args)}")
 
-parsed_path = os.path.normpath(args.data).split(os.sep)
+# parsed_path = os.path.normpath(args.data).split(os.sep)
 
-file_name       = parsed_path[-1]
+# file_name       = parsed_path[-1]
 formatted_path  = OUTPUT_PATH# FOLDER.join(parsed_path[:-1])
-print("FILENAME:", file_name, "FORMATTED:", formatted_path)
+# print("FILENAME:", file_name, "FORMATTED:", formatted_path)
 
 print(args.tf[0], args.tf[1])
 
@@ -136,7 +138,7 @@ paraview.simple._DisableFirstRenderCameraReset()
 # create a new 'NetCDF Reader'
 # hl3_98nc = NetCDFReader(registrationName='hl3_98.nc', FileName=['C:\\Users\\Dom\\AppData\\Roaming\\MobaXterm\\home\\hl3_98.nc'])
 # hl3_98nc = NetCDFReader(registrationName=file_name, FileName=[formatted_path])
-hl3_98nc = NetCDFReader(registrationName=file_name, FileName=[args.data])
+hl3_98nc = NetCDFReader(registrationName="dataset", FileName=args.data)
 # MODIFIED - to work for arbitrary data:
 hl3_98nc.Dimensions = hl3_98nc.GetProperty("DimensionInfo")[0] # '(xp, yp, zp)'
 
