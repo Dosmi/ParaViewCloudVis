@@ -17,7 +17,7 @@ Note, that when using these scripts, there are two ways:
 
 2) set default values inside the script (names of the default values are CAPITALISED below, ...
 ... for example default of --sli is written in variable SAVE_LOCAL_ILLUMINATION_IMAGE etc.
-
+<pre>
 optional arguments:
   -h, --help                                           show this help message and exit
   --sli [SAVE_LOCAL_ILLUMINATION_IMAGE]                Save Local Illumination rendered image (1=yes, 0=no)
@@ -73,3 +73,4 @@ optional arguments:
   --normlightdirvec [NORMALISE_LIGHT_DIRECTION]        Set light direction vector to be length 1
                                                            (1=yes, 0=no)
   --animrtx [RAY_TRACED_ANIMATION]                     Save animation using ray/path tracing
+  </pre>
