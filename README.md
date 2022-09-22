@@ -1,22 +1,22 @@
 # ParaViewCloudVis
 
-This documentation summarises the scripts in ParaViewCloudVis/automation_scripts
-For a brief overview of ParaView, please see ParaViewCloudVis/documentation/ParaView-UserGuide-Summary.pdf
-For the Visualisation Pipeline overview, please see ParaViewCloudVis/documentation/pipeline_documentation.pdf
-
-Automation scripts:
-cloudvis_crossect.py
-cloudvis_pipeline_automation.py
-cloudvis_pipeline_functions.py
-cloudvis_statefile_automation.py
-
-They share a set of flags to help generalise. Those flags are reviewed below. 
-Note, that when using these scripts, there are two ways:
-1) set these flags as command-line arguments, like so: 
-... pvbatch cloudvis_pipeline_automation.py --srtx=1 --oformat=".png"
-
-2) set default values inside the script (names of the default values are CAPITALISED below, ...
-... for example default of --sli is written in variable SAVE_LOCAL_ILLUMINATION_IMAGE etc.
+This documentation summarises the scripts in ParaViewCloudVis/automation_scripts<br>
+For a brief overview of ParaView, please see ParaViewCloudVis/documentation/ParaView-UserGuide-Summary.pdf<br>
+For the Visualisation Pipeline overview, please see ParaViewCloudVis/documentation/pipeline_documentation.pdf<br>
+<br>
+Automation scripts:<br>
+cloudvis_crossect.py<br>
+cloudvis_pipeline_automation.py<br>
+cloudvis_pipeline_functions.py<br>
+cloudvis_statefile_automation.py<br>
+<br>
+They share a set of flags to help generalise. Those flags are reviewed below. <br>
+Note, that when using these scripts, there are two ways:<br>
+1) set these flags as command-line arguments, like so: <br>
+... pvbatch cloudvis_pipeline_automation.py --srtx=1 --oformat=".png"<br>
+<br>
+2) set default values inside the script (names of the default values are CAPITALISED below, ...<br>
+... for example default of --sli is written in variable SAVE_LOCAL_ILLUMINATION_IMAGE etc.<br>
 <pre>
 optional arguments:
   -h, --help                                           show this help message and exit
