@@ -20,14 +20,14 @@ ANIMATION_FORMAT = ".png"
 # NOTE: if rendering video, frame numbers will be automatically appended to this
 OUTPUT_NAMES = "frame"
 # set output directory for images/video
-OUTPUT_PATH = "/usr/not-backed-up/sc17dd/script_tests/"
+OUTPUT_PATH = "/work/e710/shared/PVCLOUDVIS_OUTPUTS/"
 
 # DATA:
 # specify where to load data from; this can be both individual files, ...
 # ... or time-dependent array of files.
 # EXAMPLE: single file:  DATA_PATH = ["/work/e710/shared/hl3_98.nc"]
 #          multiple:     ['gridded/grids_1092.nc', 'gridded/grids_1958.nc', ...]
-DATA_PATH = "/home/csunix/sc17dd/modules5/summer2022/ParaViewCloudVis/state_files/test_state.pvsm"
+DATA_PATH = "/work/e710/shared/ParaViewCloudVis/state_files/test_state.pvsm"
 
 # CAMERA SETTINGS:
 # NOTE:by default, ParaView puts the camera to point to the ...
@@ -470,7 +470,7 @@ if args.sli:
                   ImageResolution=[args.image_output_width, args.image_output_height])
 
 else:
-    print("didn't save screenshot")
+    print("Not saving screenshot")
 
 
 

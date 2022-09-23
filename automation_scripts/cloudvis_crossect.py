@@ -20,16 +20,22 @@ SAVE_LOCAL_ILLUMINATION_IMAGE = 1
 # set name of individual images output
 OUTPUT_NAMES = "cloudvis_crossect"
 # set output directory for images/video
-OUTPUT_PATH = "/usr/not-backed-up/sc17dd/script_tests/"
+OUTPUT_PATH = "/work/e710/shared/PVCLOUDVIS_OUTPUTS/"
 
 # DATA:
 # specify where to load data from; this can be both individual files, ...
 # ... or time-dependent array of files.
 # EXAMPLE: single file:  DATA_PATH = ["/work/e710/shared/hl3_98.nc"]
 #          multiple:     ['gridded/grids_1092.nc', 'gridded/grids_1958.nc', ...]
-DATA_PATH = ['/usr/not-backed-up/sc17dd/gridded/grids_1092-only_hgliq_xtime.nc', '/usr/not-backed-up/sc17dd/gridded/grids_1958-only_hgliq_xtime.nc', '/usr/not-backed-up/sc17dd/gridded/grids_2780-only_hgliq_xtime.nc', '/usr/not-backed-up/sc17dd/gridded/grids_3665-only_hgliq_xtime.nc', '/usr/not-backed-up/sc17dd/gridded/grids_4483-only_hgliq_xtime.nc', '/usr/not-backed-up/sc17dd/gridded/grids_5220-only_hgliq_xtime.nc', '/usr/not-backed-up/sc17dd/gridded/grids_5937-only_hgliq_xtime.nc']
+DATA_PATH = ['/work/e710/shared/gridded_extracted/grids_1092-only_hgliq_xtime.nc', # timestep 1 [0] 0.0-1.0
+             '/work/e710/shared/gridded_extracted/grids_1958-only_hgliq_xtime.nc', # timestep 2 [1] 1.0-2.0
+             '/work/e710/shared/gridded_extracted/grids_2780-only_hgliq_xtime.nc', # timestep 3 [2] 2.0-3.0
+             '/work/e710/shared/gridded_extracted/grids_3665-only_hgliq_xtime.nc', # timestep 4 [3] 3.0-4.0
+             '/work/e710/shared/gridded_extracted/grids_4483-only_hgliq_xtime.nc', # timestep 5 [4] 4.0-5.0
+             '/work/e710/shared/gridded_extracted/grids_5220-only_hgliq_xtime.nc', # timestep 6 [5] 5.0-6.0
+             '/work/e710/shared/gridded_extracted/grids_5937-only_hgliq_xtime.nc'] # timestep 7 [6] 6.0-7.0
 # specify file location of the transfer function .json file
-TRANSFER_FUNCTION_PATH = "/home/csunix/sc17dd/modules5/summer2022/ParaViewCloudVis/transfer_functions/hl_Cloud_white_realistic_tf.json"
+TRANSFER_FUNCTION_PATH = "/work/e710/shared/ParaViewCloudVis/transfer_functions/hl_Cloud_white_realistic_tf.json"
 # specify the title of the transfer function ...
 # ... (this can be find inside the .json file, as the "Name" : "...")
 TRANSFER_FUNCTION_TITLE = "WhiteCloud"
@@ -180,7 +186,7 @@ paraview.simple._DisableFirstRenderCameraReset()
 
 # STEP 1.	Load in data placeholder
 # create a new 'NetCDF Reader'
-input_data = NetCDFReader(registrationName="grids_*", FileName=args.data)
+input_data = NetCDFReader(registrationName="input_datasource", FileName=args.data)
 # MODIFIED - to work for arbitrary data:
 input_data.Dimensions = input_data.GetProperty("DimensionInfo")[0] # '(xp, yp, zp)'
 
@@ -447,7 +453,7 @@ if args.sli:
                   ImageResolution=[args.image_output_width, args.image_output_height])
 
 else:
-    print("didn't save screenshot")
+    print("Not saving screenshot")
 
 
 
