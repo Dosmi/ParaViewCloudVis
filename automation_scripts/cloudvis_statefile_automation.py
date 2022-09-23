@@ -247,8 +247,15 @@ renderView1 = FindViewOrCreate('RenderView1', viewtype='RenderView')
 # set active view
 SetActiveView(renderView1)
 
+currentdataname = list(GetSources().keys())[0][0]
+print(currentdataname)
+
+currentdata = FindSource(currentdataname)
+SetActiveSource(currentdata)
+
+
 # show data in view
-# main_display = Show(input_data, renderView1, 'UniformGridRepresentation')
+main_display = Show(currentdata) #input_data, renderView1, 'UniformGridRepresentation')
 
 # get animation scene
 animationScene1 = GetAnimationScene()
@@ -456,7 +463,7 @@ cameraAnimationCue1.KeyFrames = keyframes_list #[keyFrame1, keyFrame2, keyFrame3
 
 
 
-
+layout1 = GetLayout()
 
 #######################################################################################################################
 ####################################################### OPTIONS #######################################################
